@@ -1,0 +1,16 @@
+/* h1 {
+  color: #369;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 250%;
+} */
+
+
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem
+}
+
+img.homecover {
+  width: 25%;
+  height: auto;
+}
