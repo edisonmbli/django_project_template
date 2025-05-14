@@ -9,6 +9,9 @@ services:
       - .:/code
     depends_on:
       - db
+    environment:
+      - DJANGO_SECRET_KEY=django-insecure-a5aglvo%$68ud__2*%14&&k0*mjmbr19ne48dzxi3#8dga92-d
+      - DJANGO_DEBUG=True
   db:
     image: postgres:13
     ports:

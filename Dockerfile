@@ -11,7 +11,11 @@ WORKDIR /code
 
 # Install dependencies
 COPY ./requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+# 确保 pip 是最新的
+RUN pip install --upgrade pip
+# 安装项目依赖
+RUN pip uninstall -y marshmallow environs || true && \
+    pip install --no-cache-dir -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 # Copy project
 COPY . .
