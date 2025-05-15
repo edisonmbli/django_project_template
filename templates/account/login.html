@@ -1,13 +1,28 @@
 {% extends "_base.html" %}
 {% load crispy_forms_tags %}
+{% load i18n %} {# 新增：加载 i18n 标签以便使用 trans #}
 
-{% block title %}Login{% endblock title %}
+{% block title %}{% trans "Log In" %}{% endblock title %} {# 使用 trans 标签以便国际化 #}
 
 {% block content %}
-    <h2>Log In</h2>
+    <h2>{% trans "Log In" %}</h2> {# 使用 trans 标签以便国际化 #}
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <button class="btn btn-success" type="submit">Login</button>
+        <button class="btn btn-success" type="submit">{% trans "Log In" %}</button> {# 使用 trans 标签以便国际化 #}
     </form>
+
+    {# 新增密码管理链接 #}
+    <div class="mt-3">
+        <p>
+            <a href="{% url 'account_change_password' %}">{% trans "Change Password" %}</a>
+        </p>
+        <p>
+            <a href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+        </p>
+        {# 如果您还想保留注册链接 #}
+        <p>
+            {% blocktrans %}Don't have an account? <a href="{{ signup_url }}">Sign up</a>.{% endblocktrans %}
+        </p>
+    </div>
 {% endblock content %}

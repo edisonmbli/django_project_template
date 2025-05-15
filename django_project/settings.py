@@ -177,3 +177,6 @@ ACCOUNT_UNIQUE_EMAIL = True
 #         ],
 #     }
 # }
+
+# Email
+DEFAULT_FROM_EMAIL = "admin@testing.com"

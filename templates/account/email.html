@@ -1,0 +1,94 @@
+{% extends "_base.html" %}
+{% load i18n %}
+{% load account %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "Account" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "E-mail Addresses" %}</h1>
+{% if user.emailaddress_set.all %}
+<p>{% trans 'The following e-mail addresses are associated with your account:' %}</p>
+
+<form action="{% url 'account_email' %}" class="email_list" method="post">
+{% csrf_token %}
+<fieldset class="blockLabels">
+
+  {% for emailaddress in user.emailaddress_set.all %}
+    <div class="form-check mb-2">
+      <input id="email_radio_{{forloop.counter}}" type="radio" name="email" class="form-check-input"
+             value="{{emailaddress.email}}"
+             data-verified="{{ emailaddress.verified|yesno:'true,false' }}" {# 新增 data-verified 属性 #}
+             {% if emailaddress.primary or user.emailaddress_set.all|length_is:"1" and forloop.first %}checked="checked"{%endif %}/>
+      <label for="email_radio_{{forloop.counter}}" class="form-check-label {% if emailaddress.primary %}primary_email{%endif%}">
+        {{ emailaddress.email }}
+        {% if emailaddress.verified %}
+          <span class="badge bg-success">{% trans "Verified" %}</span>
+        {% else %}
+          <span class="badge bg-warning text-dark">{% trans "Unverified" %}</span>
+        {% endif %}
+        {% if emailaddress.primary %}
+          <span class="badge bg-secondary">{% trans "Primary" %}</span>
+        {% endif %}
+      </label>
+    </div>
+  {% endfor %}
+
+<div class="buttonHolder mt-3">
+      <button class="btn btn-primary" type="submit" name="action_primary" >{% trans 'Make Primary' %}</button>
+      {# 为 Re-send Verification 按钮添加 ID #}
+      <button class="btn btn-secondary" id="resendVerificationBtn" type="submit" name="action_send" >{% trans 'Re-send Verification' %}</button>
+      <button class="btn btn-danger" type="submit" name="action_remove" >{% trans 'Remove' %}</button>
+</div>
+
+</fieldset>
+</form>
+
+{% else %}
+<p><strong>{% trans 'Warning:'%}</strong> {% trans "You currently do not have any e-mail addresses set up. You should add an e-mail address so you can receive notifications, reset your password, etc." %}</p>
+{% endif %}
+
+    <h2>{% trans "Add E-mail Address" %}</h2>
+
+    <form method="post" action="{% url 'account_email' %}" class="add_email">
+        {% csrf_token %}
+        {{ form|crispy }} {# 或者直接渲染 {{ form.as_p }} #}
+        <button class="btn btn-success" name="action_add" type="submit">{% trans "Add E-mail" %}</button>
+    </form>
+
+{# 新增 JavaScript 代码段 #}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const emailRadios = document.querySelectorAll('input[name="email"][type="radio"].form-check-input');
+    const resendBtn = document.getElementById('resendVerificationBtn');
+
+    function updateResendButtonState() {
+        if (!resendBtn) return; // 如果按钮不存在则退出
+
+        const selectedRadio = document.querySelector('input[name="email"][type="radio"].form-check-input:checked');
+        if (selectedRadio) {
+            const isVerified = selectedRadio.dataset.verified === 'true';
+            resendBtn.disabled = isVerified; // 如果已验证，则禁用按钮
+
+            // 可选：如果想隐藏按钮而不是禁用它
+            // if (isVerified) {
+            //     resendBtn.style.display = 'none';
+            // } else {
+            //     resendBtn.style.display = '';
+            // }
+        } else {
+             // 如果没有选中的邮箱（理论上应该总有一个被选中），默认禁用
+            resendBtn.disabled = true;
+        }
+    }
+
+    emailRadios.forEach(radio => {
+        radio.addEventListener('change', updateResendButtonState);
+    });
+
+    // 初始化按钮状态
+    updateResendButtonState();
+});
+</script>
+
+{% endblock %}
