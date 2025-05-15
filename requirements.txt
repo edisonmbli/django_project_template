@@ -8,3 +8,4 @@ crispy-bootstrap5==0.6.0
 django-allauth==0.54.0
 environs[django]==9.5.0
 marshmallow==3.21.3
+pillow==9.5.0
