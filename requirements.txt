@@ -9,3 +9,4 @@ django-allauth==0.54.0
 environs[django]==9.5.0
 marshmallow==3.21.3
 pillow==9.5.0
+django-debug-toolbar==3.4.0

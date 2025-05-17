@@ -12,8 +12,14 @@ services:
     environment:
       - DJANGO_SECRET_KEY=django-insecure-a5aglvo%$68ud__2*%14&&k0*mjmbr19ne48dzxi3#8dga92-d
       - DJANGO_DEBUG=True
+    networks:
+      - bookstore-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   db:
     image: postgres:13
+    networks:
+      - bookstore-network
     ports:
       - 5432:5432
     volumes:
@@ -26,3 +32,7 @@ services:
       
 volumes:
   postgres_data:
+
+networks:
+  bookstore-network:
+    driver: bridge
