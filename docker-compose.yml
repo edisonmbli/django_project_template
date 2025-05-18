@@ -12,6 +12,12 @@ services:
     environment:
       - DJANGO_SECRET_KEY=django-insecure-a5aglvo%$68ud__2*%14&&k0*mjmbr19ne48dzxi3#8dga92-d
       - DJANGO_DEBUG=True
+      - DJANGO_SECURE_SSL_REDIRECT=False
+      - DJANGO_SECURE_HSTS_SECONDS=0
+      - DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=False
+      - DJANGO_SECURE_HSTS_PRELOAD=False
+      - DJANGO_SESSION_COOKIE_SECURE=False
+      - DJANGO_CSRF_COOKIE_SECURE=False
     networks:
       - bookstore-network
     extra_hosts:
